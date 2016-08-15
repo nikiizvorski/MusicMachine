@@ -22,6 +22,17 @@ public class PlayerService extends Service {
         player = MediaPlayer.create(this, R.raw.jingle);
     }
 
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mediaPlayer) {
+                stopSelf();
+            }
+        });
+        return Service.START_NOT_STICKY;
+    }
+
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
@@ -58,6 +69,14 @@ public class PlayerService extends Service {
 
     public void play() {
         player.start();
+
+        int duration = player.getDuration();
+
+        if(player.getCurrentPosition() == player.getDuration()){
+            player.reset();
+        } else {
+            player.seekTo(duration);
+        }
     }
 
     public void pause() {
