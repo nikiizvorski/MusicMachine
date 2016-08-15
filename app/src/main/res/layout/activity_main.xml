@@ -10,10 +10,19 @@
     tools:context="com.example.niki.musicmachine.MainActivity">
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Download"
         android:id="@+id/download"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Play"
+        android:id="@+id/playbtn"
+        android:layout_above="@+id/download"
+        android:layout_centerHorizontal="true" />
+
 </RelativeLayout>
