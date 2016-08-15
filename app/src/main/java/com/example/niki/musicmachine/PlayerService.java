@@ -3,6 +3,7 @@ package com.example.niki.musicmachine;
 import android.app.Service;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.util.Log;
 public class PlayerService extends Service {
     private static final String TAG = PlayerService.class.getSimpleName();
     private MediaPlayer player;
+    private IBinder mBinder = new LocalBinder();
 
     @Override
     public void onCreate() {
@@ -24,7 +26,7 @@ public class PlayerService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "onBind PlayerService");
-        return null;
+        return mBinder;
     }
 
     @Override
@@ -39,8 +41,20 @@ public class PlayerService extends Service {
         player.release();
     }
 
+    //Creating Binder Class becouse we cannot use IBinder Interface dirrectly
+
+    public class LocalBinder extends Binder {
+        public PlayerService getService() {
+            return PlayerService.this;
+        }
+    }
+
     //  Client Methods these methods cannot be private becouse
     // clients will not be able to use them.
+
+    public Boolean isPlaying() {
+         return player.isPlaying();
+    }
 
     public void play() {
         player.start();

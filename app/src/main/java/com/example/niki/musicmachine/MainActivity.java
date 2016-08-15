@@ -18,12 +18,18 @@ import com.nispok.snackbar.Snackbar;
 public class MainActivity extends AppCompatActivity {
     public static final String KEY_SONG = "song";
     private Boolean mBound = false;
+    private PlayerService mPlayerService;
     private Button mDownloadButton;
     private Button mPlayButton;
     private ServiceConnection mServiceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder binder) {
             mBound = true;
+            PlayerService.LocalBinder localBinder = (PlayerService.LocalBinder) binder;
+            mPlayerService = localBinder.getService();
+            if(mPlayerService.isPlaying()){
+                mPlayButton.setText("Pause");
+            }
         }
 
         @Override
@@ -64,7 +70,15 @@ public class MainActivity extends AppCompatActivity {
         mPlayButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                    if(mBound) {
+                        if(mPlayerService.isPlaying()) {
+                            mPlayerService.pause();
+                            mPlayButton.setText("Play");
+                        } else {
+                            mPlayerService.play();
+                            mPlayButton.setText("Pause");
+                        }
+                    }
             }
         });
     }
